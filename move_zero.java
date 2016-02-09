@@ -8,55 +8,59 @@ public class move_zero {
 	static HashMap<String,String> All_States = new HashMap<String,String>();
 	public static Queue<String> bfs= new LinkedList<String>();
 	
-	 private static void isItFinalState(String oldState, String newState) {
-	        put_into_hashmap(newState, oldState);
-	        if(newState.equals("123456780")) {
-	            System.out.println("Solution Exists at Level "+Level.get(newState)+" of the tree");
-	            String traceState = newState;
-	            while (traceState != null) {
-	                System.out.println(traceState + " at " + Level.get(traceState));
-	                traceState = All_States.get(traceState);
-	            }
-	            System.exit(0);
-	        }
-	    }
-    static void put_into_hashmap(String newState, String oldState){
-        if(!Level.containsKey(newState)){
-            int newValue = oldState == null ? 0 : Level.get(oldState) + 1;
-           Level.put(newState, newValue);
-            bfs.add(newState);
-            All_States.put(newState, oldState);
-        }
-    } 
-	
-	static void up(String currentState){
-        int a = currentState.indexOf("0");
+	// Moving 0 up and modifying the screen
+	static void up(String intermediate_state){
+        int a = intermediate_state.indexOf("0");
         if(a>2){
-            String nextState = currentState.substring(0,a-3)+"0"+currentState.substring(a-2,a)+currentState.charAt(a-3)+currentState.substring(a+1);
-            isItFinalState(currentState, nextState);
+            String nextState = intermediate_state.substring(0,a-3)+"0"+intermediate_state.substring(a-2,a)+intermediate_state.charAt(a-3)+intermediate_state.substring(a+1);
+            isItFinalState(intermediate_state, nextState);
         }
     }
-
-    static void down(String currentState){
-        int a = currentState.indexOf("0");
+	// Moving 0 down and modifying String 
+    static void down(String intermediate_state){
+        int a = intermediate_state.indexOf("0");
         if(a<6){
-            String nextState = currentState.substring(0,a)+currentState.substring(a+3,a+4)+currentState.substring(a+1,a+3)+"0"+currentState.substring(a+4);
-            isItFinalState(currentState, nextState);
+            String nextState = intermediate_state.substring(0,a)+intermediate_state.substring(a+3,a+4)+intermediate_state.substring(a+1,a+3)+"0"+intermediate_state.substring(a+4);
+            isItFinalState(intermediate_state, nextState);
         }
     }
-    static void left(String currentState){
-        int a = currentState.indexOf("0");
+    //Moving 0 left and modifying String
+    static void left(String intermediate_state){
+        int a = intermediate_state.indexOf("0");
         if(a!=0 && a!=3 && a!=6){
-            String nextState = currentState.substring(0,a-1)+"0"+currentState.charAt(a-1)+currentState.substring(a+1);
-            isItFinalState(currentState, nextState);
+            String nextState = intermediate_state.substring(0,a-1)+"0"+intermediate_state.charAt(a-1)+intermediate_state.substring(a+1);
+            isItFinalState(intermediate_state, nextState);
         }
     }
-    static void right(String currentState){
-        int a = currentState.indexOf("0");
+    //Moving 0 right and modifying String 
+    static void right(String intermediate_state){
+        int a = intermediate_state.indexOf("0");
         if(a!=2 && a!=5 && a!=8){
-            String nextState = currentState.substring(0,a)+currentState.charAt(a+1)+"0"+currentState.substring(a+2);
-            isItFinalState(currentState, nextState);
+            String nextState = intermediate_state.substring(0,a)+intermediate_state.charAt(a+1)+"0"+intermediate_state.substring(a+2);
+            isItFinalState(intermediate_state, nextState);
         }
     }
+    // Checking whether we have reached the final state
+    private static void isItFinalState(String oldState, String newState) {
+        put_into_hashmap(newState, oldState);		// Adding the new state to the queue
+        if(newState.equals("123456780")) {
+            System.out.println("Solution Exists at Level "+Level.get(newState)+" of the tree");		// printing at which depth its exist
+            String traceState = newState;
+            while (traceState != null) {													// Fethcing all its intermediate state
+                System.out.println(traceState + " at " + Level.get(traceState));
+                traceState = All_States.get(traceState);
+            }
+            System.exit(0);
+        }
+    }
+    // Adding new entry into hashmap
+	static void put_into_hashmap(String newState, String oldState){
+    if(!Level.containsKey(newState)){								// checking if the entry exist, if exist incrementing the level
+        int newValue = oldState == null ? 0 : Level.get(oldState) + 1;
+       Level.put(newState, newValue);					//Adding, to count the depth 
+        bfs.add(newState);							//Adding to the queue
+        All_States.put(newState, oldState);				//Maintaining the history 
+    }	
+} 
 	
 }
